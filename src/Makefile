@@ -23,7 +23,12 @@ PLUGINS		=	../plugins/amp.so				\
 			../plugins/delay.so				\
 			../plugins/filter.so				\
 			../plugins/noise.so				\
-			../plugins/sine.so				
+			../plugins/sine.so				\
+			../plugins/amp.a				\
+			../plugins/delay.a				\
+			../plugins/filter.a				\
+			../plugins/noise.a				\
+			../plugins/sine.a				
 PROGRAMS	=	../bin/analyseplugin				\
 			../bin/applyplugin 				\
 			../bin/listplugins
@@ -46,6 +51,19 @@ CXX		=	c++
 ../plugins/%.so:	plugins/%.cpp ladspa.h gcc_exports.map
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -fPIC -o plugins/$*.o -c plugins/$*.cpp
 	$(CXX) $(LDFLAGS) -o ../plugins/$*.so plugins/$*.o -shared
+
+../plugins/filter.a: plugins/filter.c ladspa.h gcc_exports.map
+	$(CC) $(CFLAGS) $(INCLUDES) -fPIC -o plugins/filter.o -c plugins/filter.c
+	$(AR) rcs ../plugins/filter.a plugins/filter.o
+
+../plugins/%.a: plugins/%.c ladspa.h gcc_exports.map
+	$(CC) $(CFLAGS) $(INCLUDES) -fPIC -o plugins/$*.o -c plugins/$*.c
+	$(AR) rcs ../plugins/$*.a plugins/$*.o
+
+../plugins/%.a: plugins/%.cpp ladspa.h gcc_exports.map
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -fPIC -o plugins/$*.o -c plugins/$*.cpp
+	$(AR) rcs ../plugins/$*.a plugins/$*.o
+
 
 ###############################################################################
 #
@@ -96,19 +114,19 @@ targets:	$(PLUGINS) $(PROGRAMS)
 #
 
 ../bin/applyplugin:	applyplugin.o load.o default.o
-	$(CC) $(CFLAGS) $(INCLUDES) $(LDFLAGS)					\
+	$(CC) $(CFLAGS) $(INCLUDES) $(LDFLAGS)				\
 		-o ../bin/applyplugin					\
 		applyplugin.o load.o default.o				\
 		$(LIBRARIES)
 
 ../bin/analyseplugin:	analyseplugin.o load.o default.o
-	$(CC) $(CFLAGS) $(INCLUDES) $(LDFLAGS)					\
+	$(CC) $(CFLAGS) $(INCLUDES) $(LDFLAGS)				\
 		-o ../bin/analyseplugin 				\
 		analyseplugin.o load.o default.o			\
 		$(LIBRARIES)
 
 ../bin/listplugins:	listplugins.o search.o
-	$(CC) $(CFLAGS) $(INCLUDES) $(LDFLAGS)					\
+	$(CC) $(CFLAGS) $(INCLUDES) $(LDFLAGS)				\
 		-o ../bin/listplugins	 				\
 		listplugins.o search.o					\
 		$(LIBRARIES)
