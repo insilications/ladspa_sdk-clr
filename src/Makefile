@@ -4,7 +4,7 @@
 #
 # Change these if you want to install somewhere else.
 
-INSTALL_PLUGINS_DIR	=	/usr/lib/ladspa/
+INSTALL_PLUGINS_DIR	=	/usr/lib64/ladspa/
 INSTALL_INCLUDE_DIR	=	/usr/include/
 INSTALL_BINARY_DIR	=	/usr/bin/
 
@@ -13,10 +13,10 @@ INSTALL_BINARY_DIR	=	/usr/bin/
 # GENERAL
 #
 
-CFLAGS		=	-Wall -Werror -O3
-CXXFLAGS	=	-Wall -Werror -O3
+# CFLAGS	=	-Wall -Werror -O3
+# CXXFLAGS	=	-Wall -Werror -O3
 
-INCLUDES	=	-I.
+INCLUDES	=	-I. -DDEFAULT_LADSPA_PATH=$(INSTALL_PLUGINS_DIR)
 DYNAMIC_LD_LIBS =	-ldl
 LIBRARIES	=	$(DYNAMIC_LD_LIBS) -lm
 PLUGINS		=	../plugins/amp.so				\
@@ -29,7 +29,6 @@ PROGRAMS	=	../bin/analyseplugin				\
 			../bin/listplugins
 CC		=	cc
 CXX		=	c++
-MKDIR_P		=	mkdirhier
 
 ###############################################################################
 #
